@@ -1,0 +1,9 @@
+.keyboard-container {
+    line-height: 5em;
+}
+
+#highlight-block {
+    background-color: yellow;
+    width: 7px;
+    height: 10px;
+}
