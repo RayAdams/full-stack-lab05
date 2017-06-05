@@ -4,7 +4,7 @@ var currentLetterIndex;
 var currentSentenceIndex;
 
 // starting values
-var numberOfWords;
+var numberOfWords = 0;
 var numberOfMistakes;
 var startTime;
 var stopTime;
@@ -30,7 +30,7 @@ $('#keyboard-upper-container').hide();
 
 //while shift key is held down, hide lowercase keyboard and SHOW uppercase
 $(document).keydown (function(e){
-      if (event.which == 16){
+      if (event.which === 16){
           $('#keyboard-lower-container').hide();
           $('#keyboard-upper-container').show();
       } 
@@ -38,7 +38,7 @@ $(document).keydown (function(e){
 
 //show lowercase when the shift key is released and hide uppercase
 $(document).keyup (function(e){
-      if (event.which == 16){
+      if (event.which === 16){
           $('#keyboard-lower-container').show();
           $('#keyboard-upper-container').hide();
       } 
@@ -46,6 +46,7 @@ $(document).keyup (function(e){
 
 //functions initialized by keypress
 $(document).keypress(function(e){
+    event.preventDefault();
     var pressedKeyCode = e.which;
     var pressedKey = String.fromCharCode(pressedKeyCode);
     if(currentLetterIndex === 0 && currentSentenceIndex === 0)
@@ -70,12 +71,12 @@ function highlightPressedKey(pressedKeyCode) {
 //feedback div: for each array sentence, show a "log" of right/wrong per char by inserting either green check or red X
 function addAppropriateIcon(pressedKey) {
    if (pressedKey === sentences[currentSentenceIndex][currentLetterIndex]) {
-        //add correcct glyphicon
-        $('#feedback').append('<i class="glyphicon glyphicon-ok"></i>');    
+        //add correct glyphicon
+        $('#feedback').append('<span class="glyphicon glyphicon-ok"></span>');    
    }
    else {
         //add incorrect glyphicon
-        $('#feedback').append('<i class="glyphicon glyphicon-remove"></i>');
+        $('#feedback').append('<span class="glyphicon glyphicon-remove"></span>');
         numberOfMistakes ++;       
    }
 }
@@ -93,7 +94,7 @@ function goToNextCharacter() {
             runningPadding = 0;
         } else {
             //at the end of whole array, display WPM & ask to replay
-            alert("words per minute: " + getWPM());
+            alert("Your words per minute: " + getWPM());
             //respond to play again prompt
             restartGame();
         }
@@ -106,10 +107,11 @@ function displayExpectedletter() {
     $('#target-letter').text(sentences[currentSentenceIndex][currentLetterIndex]);
 }
 
+//display the current sentence
 function showCurrentSentence() {
     $('#sentence').text(sentences[currentSentenceIndex]);
 }
-
+f
 
 //display words per minute at the end of all array sentences
 function getNumberOfWords(sentence){
@@ -120,7 +122,7 @@ function getWPM() {
     //get time passed in milliseconds
     stopTime = Date.now();
     var timeElapsed = stopTime - startTime;
-    //convert to minutes
+    //convert from milliseconds to minutes
     var minutes = timeElapsed * 1.66667e-5;
     return  numberOfWords / minutes - 2 * numberOfMistakes;
 }
@@ -134,6 +136,8 @@ function restartGame (){
 
 //highlight with div id=yellow-block the expected letter in the array
 function highlightCurrentKey() {
-    runningPadding += 6;
-    $('#highlight-block').css('padding-left', runningPadding+'px');
+    runningPadding += 16;
+    $('#yellow-block').css('padding-left', runningPadding+'px');
 }
+
+//currentSentence.charAt(letterIndex)  could be used
